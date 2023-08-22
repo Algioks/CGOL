@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+
 from pprint import pprint
 from random import choice
 from typing import List
