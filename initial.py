@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from pprint import pprint
 from random import choice
 from typing import List
@@ -27,7 +28,8 @@ def create_map(size: int = 5) -> List[List[bool]]:
 
 
 def show_map(map_: List[List[bool]]):
-    # matplotlib library.. google how to do 2d animation.
+    plt.imshow(map_, cmap='binary', interpolation='nearest')
+    plt.show()
     pprint(map_)
 
 
