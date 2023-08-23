@@ -20,9 +20,10 @@ def get_neighbours(map_, x, y): # Count live neighbors around a cell
         for dy in [-1, 0, 1]:
             if dx == 0 and dy == 0:
                 continue
-            nx, ny = x + dx, y + dy
-            if 0 <= nx < SIZE and 0 <= ny < SIZE and map_[nx][ny]:
-                count += 1
+            nx = x + dx
+            ny = y + dy
+            if 0 <= nx < SIZE and 0 <= ny < SIZE : 
+                count += map_[nx][ny]
     return count
 
 def update_map(old_map):
