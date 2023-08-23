@@ -4,20 +4,17 @@ import numpy as np
 from random import choice
 from typing import List
 
-# Constants
 GENERATIONS = 100
 SIZE = 100
 
 def create_map(size: int = SIZE) -> List[List[bool]]:
     return [[choice([True,False]) for _ in range (SIZE)] for _ in range(SIZE)]
 
-# Display the map using matplotlib
 def show_map(map_: List[List[bool]]):
     plt.imshow(map_, cmap='binary', interpolation='nearest')
     plt.show()
 
-# Count live neighbors around a cell
-def get_neighbours(map_, x, y):
+def get_neighbours(map_, x, y): # Count live neighbors around a cell
     count = 0
     for dx in [-1, 0, 1]:
         for dy in [-1, 0, 1]:
@@ -28,7 +25,6 @@ def get_neighbours(map_, x, y):
                 count += 1
     return count
 
-# Update the map according to the rules
 def update_map(old_map):
     new_map = [[False] * SIZE for _ in range(SIZE)]
     for x in range(SIZE):
@@ -46,7 +42,6 @@ def update_map(old_map):
                     new_map[x][y] = True   # Becomes alive due to reproduction
     return new_map
 
-# Animate the map over generations
 def animate_map(map_):
     fig = plt.figure()
     plt.imshow(map_, cmap='binary', interpolation='nearest')
@@ -62,7 +57,6 @@ def animate_map(map_):
     ani = animation.ArtistAnimation(fig, images, interval=500, blit=True)
     plt.show()
 
-# Main function
 if __name__ == '__main__':
     initial_map = create_map(SIZE)
     animate_map(initial_map)
