@@ -45,8 +45,6 @@ def update_map(old_map):
 def animate_map(map_):
     fig = plt.figure()
     plt.imshow(map_, cmap='binary', interpolation='nearest')
-    plt.xticks([])  # Hide x-axis ticks
-    plt.yticks([])  # Hide y-axis ticks
 
     images = []
     for _ in range(GENERATIONS):
