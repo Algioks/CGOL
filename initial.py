@@ -1,56 +1,68 @@
 import matplotlib.pyplot as plt
-
-from pprint import pprint
+import matplotlib.animation as animation
+import numpy as np
 from random import choice
 from typing import List
 
-# constant
-GENERATIONS = 10
+# Constants
+GENERATIONS = 100
+SIZE = 100
 
+def create_map(size: int = SIZE) -> List[List[bool]]:
+    return [[choice([True,False]) for _ in range (SIZE)] for _ in range(SIZE)]
 
-def create_map(size: int = 5) -> List[List[bool]]:
-    """Create a 2d map for given size
-    [
-    [1,1,1],
-    [1,1,1],
-    [1,1,1]
-    ]
-
-    """
-    # map_ = []
-    # for _ in range(size):
-    #     row = []
-    #     for _ in range(size):
-    #         row.append(choice([False, True]))
-    #     map_.append(row)
-    #
-    # return map_
-    return [[choice([False, True]) for _ in range(size)] for _ in range(size)]
-
-
+# Display the map using matplotlib
 def show_map(map_: List[List[bool]]):
     plt.imshow(map_, cmap='binary', interpolation='nearest')
     plt.show()
-    pprint(map_)
 
-
-def get_neighbours(map_, coordinate_row, coordinate_column) -> int:
-    """"""
+# Count live neighbors around a cell
+def get_neighbours(map_, x, y):
     count = 0
-    # HOMEWORK
-    # code....
+    for dx in [-1, 0, 1]:
+        for dy in [-1, 0, 1]:
+            if dx == 0 and dy == 0:
+                continue
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < SIZE and 0 <= ny < SIZE and map_[nx][ny]:
+                count += 1
     return count
 
+# Update the map according to the rules
+def update_map(old_map):
+    new_map = [[False] * SIZE for _ in range(SIZE)]
+    for x in range(SIZE):
+        for y in range(SIZE):
+            alive_neighbors = get_neighbours(old_map, x, y)
+            if old_map[x][y]:
+                # Cell is alive
+                if alive_neighbors < 2 or alive_neighbors > 3:
+                    new_map[x][y] = False  # Dies due to underpopulation or overpopulation
+                else:
+                    new_map[x][y] = True   # Survives
+            else:
+                # Cell is dead
+                if alive_neighbors == 3:
+                    new_map[x][y] = True   # Becomes alive due to reproduction
+    return new_map
 
-def update_map(old_map: List[List[bool]]) -> List[List[bool]]:
-    """Updates given map to next generation"""
-    # HOMEWORK
-    # we iterate over whole map
-    # check number of alive neighbours
-    # decision: live or die
-    # return updated/new map
+# Animate the map over generations
+def animate_map(map_):
+    fig = plt.figure()
+    plt.imshow(map_, cmap='binary', interpolation='nearest')
+    plt.xticks([])  # Hide x-axis ticks
+    plt.yticks([])  # Hide y-axis ticks
 
+    images = []
+    for _ in range(GENERATIONS):
+        im = plt.imshow(map_, cmap='binary', interpolation='nearest', animated=True)
+        images.append([im])
+        map_ = update_map(map_)
+    
+    ani = animation.ArtistAnimation(fig, images, interval=500, blit=True)
+    plt.show()
 
+# Main function
 if __name__ == '__main__':
-    current_map = create_map()
-    show_map(current_map)
+    initial_map = create_map(SIZE)
+    animate_map(initial_map)
